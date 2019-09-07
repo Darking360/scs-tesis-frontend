@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
 import { FlexEnd, FlexCenter } from './Layout'
 import { ActionButton } from './Buttons'
+import Spinner from './Spinner'
 
 const CustomMenuItem = styled(MenuItem)`
     display: flex;
@@ -54,7 +55,8 @@ export class OpinionModal extends Component {
     state = {
         service: null,
         opinion: '',
-        limit: 140
+        limit: 140,
+        loading: false
     }
 
     renderServiceValues = () => {
@@ -79,9 +81,14 @@ export class OpinionModal extends Component {
         )
     }
 
+    handleSubmit = (e) => {
+        e.preventDefault()
+        this.setState({ loading: true })
+    }
+
     render() {
         const { open, closeModal } = this.props
-        const { service, opinion } = this.state
+        const { service, opinion, loading } = this.state
         return (
             <Modal
                 aria-labelledby="simple-modal-title"
@@ -90,25 +97,36 @@ export class OpinionModal extends Component {
                 onClose={closeModal}
             >
                 <ModalBody>
-                    <h2>Cuentanos que sucede, selecciona tu servicio y escribe acerca de el</h2>
-                    <FormContainer className="service-picker">
-                        <Select
-                            value={service}
-                            onChange={this.setService}
-                        >
-                            { this.renderServiceValues() }
-                        </Select>
-                        <TextField
-                            label="Multiline"
-                            multiline
-                            rowsMax="4"
-                            value={opinion}
-                            onChange={this.setOpinion}
-                            margin="normal"
-                        />
-                        { this.renderMaxCounter() }
-                        <ActionButton type="button">Enviar</ActionButton>
-                    </FormContainer>
+                    {
+                        
+                        loading ? 
+                        <FlexCenter>
+                            <Spinner />
+                        </FlexCenter>
+                        : (
+                            <>
+                                <h2>Cuentanos que sucede, selecciona tu servicio y escribe acerca de el</h2>
+                                <FormContainer onSubmit={this.handleSubmit} className="service-picker">
+                                    <Select
+                                        value={service}
+                                        onChange={this.setService}
+                                    >
+                                        { this.renderServiceValues() }
+                                    </Select>
+                                    <TextField
+                                        label="Multiline"
+                                        multiline
+                                        rowsMax="4"
+                                        value={opinion}
+                                        onChange={this.setOpinion}
+                                        margin="normal"
+                                    />
+                                    { this.renderMaxCounter() }
+                                    <ActionButton type="submit">Enviar</ActionButton>
+                                </FormContainer>
+                            </>
+                        )
+                    }
                 </ModalBody>
             </Modal>
         )
