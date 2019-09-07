@@ -12,7 +12,21 @@ export class Map extends Component {
 
     state = {
         selectedLatitude: null,
-        selectedLongitude: null
+        selectedLongitude: null,
+        myLatitude: null,
+        myLongitude: null,
+    }
+
+    componentDidMount = () => {
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude }}) => {
+                console.log('Tengo ---->')
+                console.log(latitude, longitude)
+                this.setState({ myLatitude: latitude, myLongitude: longitude })
+            });
+        } else{
+            alert("Sorry, your browser does not support HTML5 geolocation.");
+        }
     }
 
     setSelectedCoordinates = ({ lngLat }) => {
@@ -20,17 +34,16 @@ export class Map extends Component {
         this.setState({ selectedLatitude, selectedLongitude })
     }
 
-    renderCreateOpinionPopup = () => {
+    renderCreateOpinionPopup = (label, latitude, longitude) => {
         const { openModal } = this.props
-        const { selectedLatitude, selectedLongitude } = this.state
-        return (selectedLatitude && selectedLongitude) && (
+        return (latitude && longitude) && (
             <Popup
-                latitude={selectedLatitude}
-                longitude={selectedLongitude}
+                latitude={latitude}
+                longitude={longitude}
                 onClose={this.closeCreatePopup}
             >
                 <FlexCenter>
-                    <h2>Crear opinion en este punto</h2>
+                    <h2>{label}</h2>
                     <ActionButton type="button" onClick={openModal}>Crear</ActionButton>
                 </FlexCenter>
             </Popup>
@@ -41,6 +54,10 @@ export class Map extends Component {
 
     render() {
         const { viewport, setViewport } = this.props
+        const {
+            selectedLatitude, selectedLongitude,
+            myLatitude, myLongitude
+        } = this.state
         return (
             <ReactMapGL
                 {...viewport}
@@ -58,7 +75,8 @@ export class Map extends Component {
                         <img src={'/images/fire.svg'} alt="Fire"/>
                     </button>
                 </Marker>
-                { this.renderCreateOpinionPopup() }
+                { this.renderCreateOpinionPopup('Crear opinion en este punto', selectedLatitude, selectedLongitude) }
+                { this.renderCreateOpinionPopup('Estas aqui', myLatitude, myLongitude) }
             </ReactMapGL>
         )
     }
