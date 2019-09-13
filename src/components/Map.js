@@ -15,10 +15,11 @@ export class Map extends Component {
         this.props.setSelected(selectedLatitude, selectedLongitude)
     }
 
-    handleCreateAction = (active) => {
-        const { openModal, setMyActive } = this.props
+    handleAction = (active, type) => {
+        const { openModal, openSearchModal, setMyActive } = this.props
         setMyActive(active)
-        openModal()
+        if (type === 1) openModal()
+        else openSearchModal()
     }
 
     renderCreateOpinionPopup = (label, latitude, longitude, active) => {
@@ -30,16 +31,33 @@ export class Map extends Component {
             >
                 <FlexCenter>
                     <h2>{label}</h2>
-                    <ActionButton type="button" onClick={() => this.handleCreateAction(active)}>Crear</ActionButton>
+                    <ActionButton type="button" onClick={() => this.handleAction(active, 1)}>Crear</ActionButton>
+                    <ActionButton type="button" onClick={() => this.handleAction(active, 2)}>Buscar</ActionButton>
                 </FlexCenter>
             </Popup>
         )
+    }
+
+    renderResults = () => {
+        const { results } = this.props
+        return results.map(result => (
+            <Marker
+                key={result._id}
+                latitude={result.location.coordinates[0]}
+                longitude={result.location.coordinates[1]}
+            >
+                <button>
+                    <img src={'/images/fire.svg'} alt="Fire"/>
+                </button>
+            </Marker>
+        ))
     }
 
     closeCreatePopup = () => this.props.setSelected(null, null)
 
     render() {
         const { viewport, setViewport, myLatitude, myLongitude, selectedLatitude, selectedLongitude } = this.props
+        console.log(this.renderResults())
         return (
             <ReactMapGL
                 {...viewport}
@@ -48,15 +66,7 @@ export class Map extends Component {
                 mapboxApiAccessToken={mapApiKey}
                 onClick={this.setSelectedCoordinates}
             >
-                <Marker
-                    key="center"
-                    latitude={7.775788}
-                    longitude={-72.221874}
-                >
-                    <button>
-                        <img src={'/images/fire.svg'} alt="Fire"/>
-                    </button>
-                </Marker>
+                { this.renderResults() }
                 { this.renderCreateOpinionPopup('Estas aqui', myLatitude, myLongitude, 1) }
                 { this.renderCreateOpinionPopup('Crear opinion en este punto', selectedLatitude, selectedLongitude, 2) }
             </ReactMapGL>
