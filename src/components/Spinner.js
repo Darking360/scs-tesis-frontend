@@ -1,4 +1,3 @@
-import React, { Component } from 'react'
 import styled, { keyframes } from 'styled-components'
 
 const animateLoader = keyframes`
@@ -12,6 +11,8 @@ const animateLoader = keyframes`
 `;
 
 const Spinner = styled.div`
+    padding: 1rem;
+
     &:focus {
         outline: none;
     }

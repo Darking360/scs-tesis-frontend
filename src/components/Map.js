@@ -10,32 +10,18 @@ const mapApiKey = process.env.REACT_APP_MAPBOX_TOKEN
 
 export class Map extends Component {
 
-    state = {
-        selectedLatitude: null,
-        selectedLongitude: null,
-        myLatitude: null,
-        myLongitude: null,
-    }
-
-    componentDidMount = () => {
-        if(navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude }}) => {
-                console.log('Tengo ---->')
-                console.log(latitude, longitude)
-                this.setState({ myLatitude: latitude, myLongitude: longitude })
-            });
-        } else{
-            alert("Sorry, your browser does not support HTML5 geolocation.");
-        }
-    }
-
     setSelectedCoordinates = ({ lngLat }) => {
         const [selectedLongitude, selectedLatitude] = lngLat
-        this.setState({ selectedLatitude, selectedLongitude })
+        this.props.setSelected(selectedLatitude, selectedLongitude)
     }
 
-    renderCreateOpinionPopup = (label, latitude, longitude) => {
-        const { openModal } = this.props
+    handleCreateAction = (active) => {
+        const { openModal, setMyActive } = this.props
+        setMyActive(active)
+        openModal()
+    }
+
+    renderCreateOpinionPopup = (label, latitude, longitude, active) => {
         return (latitude && longitude) && (
             <Popup
                 latitude={latitude}
@@ -44,20 +30,16 @@ export class Map extends Component {
             >
                 <FlexCenter>
                     <h2>{label}</h2>
-                    <ActionButton type="button" onClick={openModal}>Crear</ActionButton>
+                    <ActionButton type="button" onClick={() => this.handleCreateAction(active)}>Crear</ActionButton>
                 </FlexCenter>
             </Popup>
         )
     }
 
-    closeCreatePopup = () => this.setState({ selectedLatitude: null, selectedLongitude: null })
+    closeCreatePopup = () => this.props.setSelected(null, null)
 
     render() {
-        const { viewport, setViewport } = this.props
-        const {
-            selectedLatitude, selectedLongitude,
-            myLatitude, myLongitude
-        } = this.state
+        const { viewport, setViewport, myLatitude, myLongitude, selectedLatitude, selectedLongitude } = this.props
         return (
             <ReactMapGL
                 {...viewport}
@@ -75,8 +57,8 @@ export class Map extends Component {
                         <img src={'/images/fire.svg'} alt="Fire"/>
                     </button>
                 </Marker>
-                { this.renderCreateOpinionPopup('Crear opinion en este punto', selectedLatitude, selectedLongitude) }
-                { this.renderCreateOpinionPopup('Estas aqui', myLatitude, myLongitude) }
+                { this.renderCreateOpinionPopup('Estas aqui', myLatitude, myLongitude, 1) }
+                { this.renderCreateOpinionPopup('Crear opinion en este punto', selectedLatitude, selectedLongitude, 2) }
             </ReactMapGL>
         )
     }
