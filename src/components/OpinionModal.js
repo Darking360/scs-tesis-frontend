@@ -74,6 +74,12 @@ const defaultMessages = {
     neutral: 'Al parecer todo esta normal con tu servicio, trata de escribir una opinion diferente si sientes que no es asi 🤔'
 }
 
+const headerMessages = {
+    positive: 'Estas contento con este servicio 🎉',
+    negative: 'Estas molesto con este servicio 😡',
+    neutral: 'No podemos desencriptar lo que piensas sobre este servicio 🤔'
+}
+
 export class OpinionModal extends Component {
 
     state = {
@@ -141,6 +147,7 @@ export class OpinionModal extends Component {
             return (
                 <FlexColumnResponse>
                     <h2>Muchas gracias por enviar tu opinion!</h2>
+                    <h3>{headerMessages[response.sentiment]}</h3>
                     <img src={`/images/neutral.svg`} alt="Icono del sentimiento"/>
                     <span>{defaultMessages['neutral']}</span>
                     <ActionButton type="submit" onClick={closeModal}>Cerrar</ActionButton>
@@ -151,6 +158,7 @@ export class OpinionModal extends Component {
         return (
             <FlexColumnResponse>
                 <h2>Muchas gracias por enviar tu opinion!</h2>
+                <h3>{headerMessages[response.sentiment]}</h3>
                 <img src={`/images/${response.sentiment}.svg`} alt="Icono del sentimiento"/>
                 <span>{defaultMessages[response.sentiment]}</span>
                 <ActionButton type="button" onClick={closeModal}>Cerrar</ActionButton>
