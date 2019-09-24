@@ -17,3 +17,7 @@ export const ActionCornerButton = styled(ActionButton)`
     top: 90%;
     right: 5%;
 `
+
+export const ActionCornerTopButton = styled(ActionCornerButton)`
+    top: 5%;
+`

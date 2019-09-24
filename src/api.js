@@ -14,3 +14,7 @@ export function getOpinions(lat, lng, kilometers) {
     return axios.get(`${API_URL}/opinions/search?lat=${lat}&lng=${lng}&kilometers=${kilometers}`);
 }
 
+export function subscribeInAPI(topic, token) {
+    return axios.post(`${API_URL}/tokens`, { topic, token })
+}
+

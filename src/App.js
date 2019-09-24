@@ -3,7 +3,9 @@ import Map from './components/Map'
 import OpinionModal from './components/OpinionModal'
 import SearchModal from './components/SearchModal'
 import { MainContainer } from './components/Layout'
-import { ActionCornerButton } from './components/Buttons'
+import { ActionCornerButton, ActionCornerTopButton } from './components/Buttons'
+import NProgress from 'nprogress'
+import { askForPermissioToReceiveNotifications } from './push-notification'
 
 export class App extends Component {
 
@@ -23,7 +25,8 @@ export class App extends Component {
         selectedLongitude: null,
         active: 0,
         results: [],
-        activeResult: null
+        activeResult: null,
+        loading: false
     }
 
     componentDidMount = () => {
@@ -52,8 +55,20 @@ export class App extends Component {
 
     setResponses = (results) => this.setState({ results, searchModalOpen: false })
 
+    subscribeToPushNotifications = () => {
+        this.setState({ loading: true }, () => {
+            NProgress.start()
+            const response = askForPermissioToReceiveNotifications()
+            if (response) {
+                this.setState({ loading: false }, NProgress.done);
+            } else {
+                this.setState({ loading: false }, NProgress.done);
+            }
+        })
+    }
+
     render() {
-        const { viewport, opinionModalOpen, searchModalOpen, myLatitude, myLongitude, selectedLatitude, selectedLongitude, active, results } = this.state
+        const { viewport, opinionModalOpen, searchModalOpen, myLatitude, myLongitude, selectedLatitude, selectedLongitude, active, results, loading } = this.state
         return (
             <MainContainer>
                 <Map 
@@ -88,9 +103,12 @@ export class App extends Component {
                     active={active}
                     setResponses={this.setResponses}
                 />
-                <ActionCornerButton type="button" onClick={this.openOpinionModal}>
+                <ActionCornerButton disabled={loading} type="button" onClick={this.openOpinionModal}>
                     Crear en tu ubicacion
                 </ActionCornerButton>
+                <ActionCornerTopButton disabled={loading} type="button" onClick={this.subscribeToPushNotifications}>
+                    Subscribir a notificaciones
+                </ActionCornerTopButton>
             </MainContainer>
         )
     }
