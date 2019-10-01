@@ -5,6 +5,7 @@ import SearchModal from './components/SearchModal'
 import { MainContainer } from './components/Layout'
 import { ActionCornerButton, ActionCornerTopButton } from './components/Buttons'
 import NProgress from 'nprogress'
+import Swal from 'sweetalert2'
 import { askForPermissioToReceiveNotifications } from './push-notification'
 
 export class App extends Component {
@@ -56,15 +57,44 @@ export class App extends Component {
     setResponses = (results) => this.setState({ results, searchModalOpen: false })
 
     subscribeToPushNotifications = () => {
-        this.setState({ loading: true }, () => {
-            NProgress.start()
-            const response = askForPermissioToReceiveNotifications()
-            if (response) {
-                this.setState({ loading: false }, NProgress.done);
-            } else {
-                this.setState({ loading: false }, NProgress.done);
+        Swal.fire({
+            title: 'Quieres suscribirte?',
+            text: "Llegaran notificaciones sobre los diferentes ervicio a este dispositivo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50a682',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Estamos suscribiendote!',
+                    onBeforeOpen: () => {
+                      Swal.showLoading()
+                      this.setState({ loading: true }, async () => {
+                            const response = await askForPermissioToReceiveNotifications()
+                            if (response) {
+                                this.setState({ loading: false }, () => {
+                                    Swal.fire({
+                                        type: 'success',
+                                        title: 'Te has sucrito a las notificaciones de servicios.'
+                                      })
+                                });
+                            } else {
+                                this.setState({ loading: false }, () => {
+                                    Swal.fire({
+                                        type: 'error',
+                                        title: 'Oh no!',
+                                        text: 'Algo ha ido mal con la suscripcion, intentalo de nuevo!'
+                                      })
+                                });
+                            }
+                        })
+                    }
+                  })
             }
-        })
+          })
     }
 
     render() {

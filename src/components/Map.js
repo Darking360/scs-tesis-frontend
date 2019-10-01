@@ -28,6 +28,7 @@ export class Map extends Component {
                 latitude={latitude}
                 longitude={longitude}
                 onClose={this.closeCreatePopup}
+                closeOnClick={false}
             >
                 <FlexCenter>
                     <h2>{label}</h2>

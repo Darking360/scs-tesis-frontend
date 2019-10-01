@@ -3,8 +3,22 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { initializeFirebase } from './push-notification'
+import { createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+        main: '#50a682'
+    }
+  },
+})
+
+ReactDOM.render(
+    <ThemeProvider theme={theme}>
+        <App />
+    </ThemeProvider>    
+, document.getElementById('root'))
 serviceWorker.register()
 initializeFirebase()
 
