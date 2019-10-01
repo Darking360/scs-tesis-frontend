@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Modal from '@material-ui/core/Modal'
 
 export const FlexCenter = styled.div`
     display: flex;
@@ -24,13 +25,16 @@ export const MainContainer = styled.section`
 `
 
 export const ModalBody = styled.div`
-    position: absolute;
     width: 50vw;
     background-color: white;
     border: '2px solid #000';
     padding: 2rem;
-    top: 30%;
-    right: 25%;
+    border-radius: 15px;
+
+    span.MuiSlider-thumb > span > span > span {
+        color: white;
+        font-weight: bold;
+    }
 
     section.service-picker {
         width: 50%;

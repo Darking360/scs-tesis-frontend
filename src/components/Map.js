@@ -47,14 +47,14 @@ export class Map extends Component {
     }
 
     renderResults = () => {
-        const { results } = this.props
+        const { results, selectOpinion } = this.props
         return results.filter(({sentiment}) => sentiment).map(result => (
             <Marker
                 key={result._id}
                 latitude={result.location.coordinates[0]}
                 longitude={result.location.coordinates[1]}
             >
-                <MarkerButton sentiment={result.sentiment}>
+                <MarkerButton sentiment={result.sentiment} onClick={() => selectOpinion(result)}>
                     <img src={`/images/${imageBindings[result.service]}.svg`} alt="Fire"/>
                 </MarkerButton>
             </Marker>

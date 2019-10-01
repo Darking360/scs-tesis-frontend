@@ -102,7 +102,9 @@ export class OpinionModal extends Component {
         }
         try {
             const { data } = await getOpinions(latitude, longitude, kilometers)
-            setResponses(data)
+            this.setState({ loading: false }, () => {
+                setResponses(data)
+            })
         } catch (error) {
             this.setState({ error: true })
         }
@@ -173,6 +175,7 @@ export class OpinionModal extends Component {
                 aria-describedby="simple-modal-description"
                 open={open}
                 onClose={closeModal}
+                style={{display:'flex',alignItems:'center',justifyContent:'center'}}
             >
                 <ModalBody>
                     { this.renderContent() }

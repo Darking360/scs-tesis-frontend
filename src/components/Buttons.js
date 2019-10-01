@@ -16,6 +16,11 @@ export const ActionButton = styled.button`
     font-size: 1.5rem;
     padding: .5rem 1em;
     cursor: pointer;
+
+    &[disabled] {
+        background-color: grey;
+        cursor: inherit;
+    }
 `
 
 export const ActionCornerButton = styled(ActionButton)`

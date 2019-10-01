@@ -6,6 +6,7 @@ import { ModalBody } from './Layout'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
+import Swal from 'sweetalert2'
 import { FlexEnd, FlexCenter } from './Layout'
 import { ActionButton } from './Buttons'
 import Spinner from './Spinner'
@@ -80,15 +81,26 @@ const headerMessages = {
     neutral: 'No podemos desencriptar lo que piensas sobre este servicio 🤔'
 }
 
+const headerOpinionMessages = {
+    positive: 'El ciudadano esta contento con el servicio 🎉',
+    negative: 'El ciudadano esta molesto con este servicio 😡',
+    neutral: 'El ciudadano no tiene una opinion detallada sobre este servicio 🤔'
+}
+
+const initialState = {
+    service: null,
+    opinion: '',
+    limit: 140,
+    loading: false,
+    response: null,
+    error: false
+}
+
+
 export class OpinionModal extends Component {
 
     state = {
-        service: null,
-        opinion: '',
-        limit: 140,
-        loading: false,
-        response: null,
-        error: false
+        ...initialState
     }
 
     renderServiceValues = () => {
@@ -114,7 +126,7 @@ export class OpinionModal extends Component {
     }
 
     handleCreateOpinion = async () => {
-        const { active, myLatitude, myLongitude, selectedLatitude, selectedLongitude } = this.props
+        const { active, myLatitude, myLongitude, selectedLatitude, selectedLongitude, closeModal } = this.props
         const { opinion, service } = this.state
         let latitude = myLatitude
         let longitude = myLongitude
@@ -130,7 +142,14 @@ export class OpinionModal extends Component {
             const { data } = await createOpinion(opinion, location, service)
             this.setState({ response: data, loading: false })
         } catch (error) {
-            this.setState({ error: true, loading: false })
+            this.setState({ ...initialState }, () => {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oh no!',
+                    text: 'Algo ha ido mal con el envio de la opinion, intentalo de nuevo!'
+                })
+                closeModal()
+            })
         }
     }
 
@@ -141,16 +160,17 @@ export class OpinionModal extends Component {
 
     renderResponse = (error = false) => {
         const { response } = this.state
-        const { closeModal } = this.props
+        const { selectedOpinion } = this.props
 
-        if (error) {
+        if (selectedOpinion) {
             return (
                 <FlexColumnResponse>
-                    <h2>Muchas gracias por enviar tu opinion!</h2>
-                    <h3>{headerMessages[response.sentiment]}</h3>
-                    <img src={`/images/neutral.svg`} alt="Icono del sentimiento"/>
-                    <span>{defaultMessages['neutral']}</span>
-                    <ActionButton type="submit" onClick={closeModal}>Cerrar</ActionButton>
+                    <h2>{headerOpinionMessages[selectedOpinion.sentiment]}</h2>
+                    <h3>{headerMessages[selectedOpinion.sentiment]}</h3>
+                    <img src={`/images/${selectedOpinion.sentiment}.svg`} alt="Icono del sentimiento"/>
+                    <h4>El ciudadano opina:</h4>
+                    <i>{selectedOpinion.opinion}</i>
+                    <ActionButton type="button" onClick={this.cleanAndClose}>Cerrar</ActionButton>
                 </FlexColumnResponse>
             )
         }
@@ -161,13 +181,14 @@ export class OpinionModal extends Component {
                 <h3>{headerMessages[response.sentiment]}</h3>
                 <img src={`/images/${response.sentiment}.svg`} alt="Icono del sentimiento"/>
                 <span>{defaultMessages[response.sentiment]}</span>
-                <ActionButton type="button" onClick={closeModal}>Cerrar</ActionButton>
+                <ActionButton type="button" onClick={this.cleanAndClose}>Cerrar</ActionButton>
             </FlexColumnResponse>
         )
     }
 
     renderContent = () => {
         const { service, opinion, loading, response, error } = this.state
+        const { selectedOpinion } = this.props
         if (loading) {
             return (
                 <FlexCenter>
@@ -175,11 +196,8 @@ export class OpinionModal extends Component {
                 </FlexCenter>
             )
         }
-        if (response) {
+        if (response || selectedOpinion) {
             return this.renderResponse()
-        }
-        if (error) {
-            return this.renderResponse(true)
         }
         return (
             <>
@@ -200,21 +218,29 @@ export class OpinionModal extends Component {
                         margin="normal"
                     />
                     { this.renderMaxCounter() }
-                    <ActionButton type="submit">Enviar</ActionButton>
+                    <ActionButton type="submit" disabled={!service || !opinion.length}>Enviar</ActionButton>
                 </FormContainer>
             </>
         )
     }
 
+    cleanAndClose = () => {
+        const { closeModal, selectOpinion } = this.props
+        this.setState({ ...initialState }, () => {
+            selectOpinion(null)
+            closeModal()
+        })
+    }
+
     render() {
-        const { open, closeModal } = this.props
-        
+        const { open } = this.props
         return (
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
                 open={open}
-                onClose={closeModal}
+                onClose={this.cleanAndClose}
+                style={{display:'flex',alignItems:'center',justifyContent:'center'}}
             >
                 <ModalBody>
                     { this.renderContent() }
