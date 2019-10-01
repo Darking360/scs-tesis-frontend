@@ -1,12 +1,19 @@
 import React, { Component } from 'react'
 import ReactMapGL, { Marker, Popup } from 'react-map-gl'
 import PropTypes from 'prop-types'
-import { ActionButton } from './Buttons'
+import { ActionButton, MarkerButton } from './Buttons'
 import {
     FlexCenter
 } from './Layout'
 
 const mapApiKey = process.env.REACT_APP_MAPBOX_TOKEN
+
+const imageBindings = {
+    "agua": "water",
+    "internet": "internet",
+    "transporte": "bus",
+    "luz": "light"
+}
 
 export class Map extends Component {
 
@@ -41,15 +48,15 @@ export class Map extends Component {
 
     renderResults = () => {
         const { results } = this.props
-        return results.map(result => (
+        return results.filter(({sentiment}) => sentiment).map(result => (
             <Marker
                 key={result._id}
                 latitude={result.location.coordinates[0]}
                 longitude={result.location.coordinates[1]}
             >
-                <button>
-                    <img src={'/images/fire.svg'} alt="Fire"/>
-                </button>
+                <MarkerButton sentiment={result.sentiment}>
+                    <img src={`/images/${imageBindings[result.service]}.svg`} alt="Fire"/>
+                </MarkerButton>
             </Marker>
         ))
     }
