@@ -27,7 +27,8 @@ export class App extends Component {
         results: [],
         activeResult: null,
         loading: false,
-        selectedOpinion: null
+        selectedOpinion: null,
+        alertOpinion: null
     }
 
     componentDidMount = () => {
@@ -37,6 +38,10 @@ export class App extends Component {
             });
         } else{
             alert("Sorry, your browser does not support HTML5 geolocation.");
+        }
+        // Check URL params to set if included
+        if (window.params) {
+            this.setState({ alertOpinion: window.params.id, alertModalIsOpen: true });
         }
     }
 
@@ -49,6 +54,10 @@ export class App extends Component {
     closeSearchModal = () => this.setState({ searchModalOpen: false })
 
     openSearchModal = () => this.setState({ searchModalOpen: true })
+
+    closeAlertModal = () => this.setState({ alertModalOpen: false })
+
+    openAlertModal = () => this.setState({ alertModalOpen: true })
 
     setSelected = (selectedLatitude, selectedLongitude) => this.setState({ selectedLatitude, selectedLongitude })
 
@@ -106,7 +115,7 @@ export class App extends Component {
     }
 
     render() {
-        const { viewport, opinionModalOpen, searchModalOpen, myLatitude, myLongitude, selectedLatitude, selectedLongitude, active, results, loading, selectedOpinion } = this.state
+        const { viewport, opinionModalOpen, searchModalOpen, myLatitude, myLongitude, selectedLatitude, selectedLongitude, active, results, loading, selectedOpinion, alertModalIsOpen, alertOpinion } = this.state
         return (
             <MainContainer>
                 <Map 
@@ -143,6 +152,11 @@ export class App extends Component {
                     selectedLongitude={selectedLongitude}
                     active={active}
                     setResponses={this.setResponses}
+                />
+                <OpinionModal
+                    open={alertModalIsOpen}
+                    closeModal={this.closeAlertModal}
+                    opinionId={alertOpinion}
                 />
                 <ActionCornerButton disabled={loading} type="button" onClick={this.openOpinionModal}>
                     Crear en tu ubicacion

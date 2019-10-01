@@ -18,3 +18,7 @@ export function subscribeInAPI(topic, token) {
     return axios.post(`${API_URL}/tokens`, { topic, token })
 }
 
+export function getOpinion(id) {
+    return axios.get(`${API_URL}/opinions/${id}`);
+}
+
