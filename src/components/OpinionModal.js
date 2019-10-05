@@ -210,7 +210,7 @@ export class OpinionModal extends Component {
                         { this.renderServiceValues() }
                     </Select>
                     <TextField
-                        label="Multiline"
+                        label="Opinion acerca del servicio"
                         multiline
                         rowsMax="4"
                         value={opinion}
@@ -218,7 +218,7 @@ export class OpinionModal extends Component {
                         margin="normal"
                     />
                     { this.renderMaxCounter() }
-                    <ActionButton type="submit" disabled={!service || !opinion.length}>Enviar</ActionButton>
+                    <ActionButton type="submit" disabled={!service || !opinion.length || opinion.length > 140}>Enviar</ActionButton>
                 </FormContainer>
             </>
         )
