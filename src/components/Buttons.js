@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import breakpoint from 'styled-components-breakpoint';
 
 const sentiments = {
     "positive": "#50a682",
@@ -13,7 +14,7 @@ export const ActionButton = styled.button`
     background: #50a682;
     border: 2px solid white;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 0.8rem;
     padding: .5rem 1em;
     cursor: pointer;
 
@@ -21,6 +22,10 @@ export const ActionButton = styled.button`
         background-color: grey;
         cursor: inherit;
     }
+
+    ${breakpoint('tablet')`
+        font-size: 1.3rem;
+    `}
 `
 
 export const ActionCornerButton = styled(ActionButton)`

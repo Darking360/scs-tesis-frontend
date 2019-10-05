@@ -6,11 +6,16 @@ import { ModalBody } from './Layout'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
+import breakpoint from 'styled-components-breakpoint';
 import Swal from 'sweetalert2'
 import { FlexEnd, FlexCenter } from './Layout'
 import { ActionButton } from './Buttons'
 import Spinner from './Spinner'
 import { createOpinion } from '../api'
+
+const StyledTextField = styled(TextField)`
+    
+`;
 
 const CustomMenuItem = styled(MenuItem)`
     display: flex;
@@ -38,6 +43,20 @@ const FormContainer = styled.form`
         width: 50%;
         margin: 0 auto;
     }
+
+    label {
+        font-size: 0.8rem;
+    }
+
+    div > span {
+        font-weight: bold;
+    }
+
+    ${breakpoint('tablet')`
+        label {
+            font-size: 1rem;
+        }
+    `}
 `;
 
 const CounterSpan = styled.span`
