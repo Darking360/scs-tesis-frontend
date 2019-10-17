@@ -186,6 +186,9 @@ export class OpinionModal extends Component {
                 <FlexColumnResponse>
                     <h2>{headerOpinionMessages[selectedOpinion.sentiment]}</h2>
                     <h3>{headerMessages[selectedOpinion.sentiment]}</h3>
+                    <h4>Servicio:</h4>
+                    <img src={`/images/${selectedOpinion.service}.svg`} alt="Servicio"/>
+                    <h4>Resultado:</h4>
                     <img src={`/images/${selectedOpinion.sentiment}.svg`} alt="Icono del sentimiento"/>
                     <h4>El ciudadano opina:</h4>
                     <i>{selectedOpinion.opinion}</i>

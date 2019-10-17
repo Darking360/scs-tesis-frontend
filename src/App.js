@@ -6,6 +6,7 @@ import { MainContainer } from './components/Layout'
 import { ActionCornerButton, ActionCornerTopButton } from './components/Buttons'
 import Swal from 'sweetalert2'
 import { askForPermissioToReceiveNotifications } from './push-notification'
+import { getOpinion } from './api'
 
 export class App extends Component {
 
@@ -31,7 +32,22 @@ export class App extends Component {
         alertOpinion: null
     }
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
+        console.log(window.location.search)
+        if (window.location.search) {
+            try {
+                const search = window.location.search
+                const [_, idOpinion] = search.split("?notification=")
+                const { data: selectedOpinion} = await getOpinion(idOpinion)
+                this.setState({ selectedOpinion, opinionModalOpen: true })
+            } catch (error) {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oh no!',
+                    text: 'Algo ha ido mal cargando la opinion, recarga la pagina e intenta de nuevo!'
+                  })
+            }
+        }
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude }}) => {
                 this.setState({ myLatitude: latitude, myLongitude: longitude })
