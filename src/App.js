@@ -33,7 +33,6 @@ export class App extends Component {
     }
 
     componentDidMount = async () => {
-        console.log(window.location.search)
         if (window.location.search) {
             try {
                 const search = window.location.search

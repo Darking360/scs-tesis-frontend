@@ -65,7 +65,6 @@ export class Map extends Component {
 
     render() {
         const { viewport, setViewport, myLatitude, myLongitude, selectedLatitude, selectedLongitude } = this.props
-        console.log(this.renderResults())
         return (
             <ReactMapGL
                 {...viewport}
