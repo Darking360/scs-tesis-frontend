@@ -10,6 +10,7 @@ import { FlexCenter } from './Layout'
 import { ActionButton } from './Buttons'
 import Spinner from './Spinner'
 import { getOpinions } from '../api'
+import breakpoint from 'styled-components-breakpoint';
 
 const CustomMenuItem = styled(MenuItem)`
     display: flex;
@@ -45,11 +46,20 @@ const CounterSpan = styled.span`
 `
 
 const FlexColumnResponse = styled(FlexCenter)`
+
     img {
-        width: 8rem;
-        height: 11rem;
+        width: 5rem;
+        height: 5rem;
         object-fit: contain;
     }
+
+    ${breakpoint('tablet')`
+        img {
+            width: 8rem;
+            height: 11rem;
+            object-fit: contain;
+        }
+    `}
 
     span {
         text-align: center;

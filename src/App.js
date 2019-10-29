@@ -37,8 +37,8 @@ export class App extends Component {
             try {
                 const search = window.location.search
                 const [_, idOpinion] = search.split("?notification=")
-                const { data: selectedOpinion} = await getOpinion(idOpinion)
-                this.setState({ selectedOpinion, opinionModalOpen: true })
+                const { data: { opinion: selectedOpinion, badOpinions }} = await getOpinion(idOpinion)
+                this.setState({ selectedOpinion, badOpinions, opinionModalOpen: true })
             } catch (error) {
                 Swal.fire({
                     type: 'error',
@@ -130,7 +130,7 @@ export class App extends Component {
     }
 
     render() {
-        const { viewport, opinionModalOpen, searchModalOpen, myLatitude, myLongitude, selectedLatitude, selectedLongitude, active, results, loading, selectedOpinion, alertModalIsOpen, alertOpinion } = this.state
+        const { viewport, opinionModalOpen, searchModalOpen, myLatitude, myLongitude, selectedLatitude, selectedLongitude, active, results, loading, selectedOpinion, alertModalIsOpen, alertOpinion, badOpinions } = this.state
         return (
             <MainContainer>
                 <Map 
@@ -146,6 +146,8 @@ export class App extends Component {
                     setMyActive={this.setMyActive}
                     results={results}
                     selectOpinion={this.selectOpinion}
+                    selectedOpinion={selectedOpinion}
+                    badOpinions={badOpinions}
                 />
                 <OpinionModal
                     open={opinionModalOpen}

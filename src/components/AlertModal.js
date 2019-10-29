@@ -9,11 +9,21 @@ import { FlexCenter } from './Layout'
 import { ActionButton } from './Buttons'
 import Spinner from './Spinner'
 import { getOpinion } from '../api'
+import breakpoint from 'styled-components-breakpoint';
 
 const FlexColumnResponse = styled(FlexCenter)`
+
+    ${breakpoint('tablet')`
+        img {
+            width: 8rem;
+            height: 11rem;
+            object-fit: contain;
+        }
+    `}
+    
     img {
-        width: 8rem;
-        height: 11rem;
+        width: 5rem;
+        height: 5rem;
         object-fit: contain;
     }
 

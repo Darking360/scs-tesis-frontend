@@ -65,9 +65,18 @@ const CounterSpan = styled.span`
 `
 
 const FlexColumnResponse = styled(FlexCenter)`
+
+    ${breakpoint('tablet')`
+        img {
+            width: 8rem;
+            height: 11rem;
+            object-fit: contain;
+        }
+    `}
+
     img {
-        width: 8rem;
-        height: 11rem;
+        width: 5rem;
+        height: 5rem;
         object-fit: contain;
     }
 
@@ -185,13 +194,13 @@ export class OpinionModal extends Component {
             return (
                 <FlexColumnResponse>
                     <h2>{headerOpinionMessages[selectedOpinion.sentiment]}</h2>
-                    <h3>{headerMessages[selectedOpinion.sentiment]}</h3>
                     <h4>Servicio:</h4>
                     <img src={`/images/${selectedOpinion.service}.svg`} alt="Servicio"/>
                     <h4>Resultado:</h4>
                     <img src={`/images/${selectedOpinion.sentiment}.svg`} alt="Icono del sentimiento"/>
                     <h4>El ciudadano opina:</h4>
                     <i>{selectedOpinion.opinion}</i>
+                    <h5>Cuando cierres este modal, podras ver un mapa de calor de los sectores con servicio afectado del dia</h5>
                     <ActionButton type="button" onClick={this.cleanAndClose}>Cerrar</ActionButton>
                 </FlexColumnResponse>
             )

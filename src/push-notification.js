@@ -14,7 +14,7 @@ export const initializeFirebase = () => {
     const { notification: { click_action } } = payload;
     console.log('Message received. ', payload);
     Swal.fire({
-      title: 'Hay una alerta de servicios, la estamos abriendo por ti 🕓',
+      title: 'Hay una alerta de servicios 🕓',
       text: "Deseas abrirla?",
       type: 'warning',
       showCancelButton: true,
@@ -35,11 +35,9 @@ export const askForPermissioToReceiveNotifications = async () => {
     const messaging = firebase.messaging();
     await messaging.requestPermission();
     const token = await messaging.getToken();
-    console.log('Token:', token);
     await subscribeInAPI(topicAll, token);
     return token;
   } catch (error) {
-    console.error(error);
     return null;
   }
 }
