@@ -200,7 +200,11 @@ export class OpinionModal extends Component {
                     <img src={`/images/${selectedOpinion.sentiment}.svg`} alt="Icono del sentimiento"/>
                     <h4>El ciudadano opina:</h4>
                     <i>{selectedOpinion.opinion}</i>
-                    <h5>Cuando cierres este modal, podras ver un mapa de calor de los sectores con servicio afectado del dia</h5>
+                    { 
+                        window.location.search && (
+                            <h5>Cuando cierres este modal, podras ver un mapa de calor de los sectores con servicio afectado del dia</h5>
+                        )
+                    }
                     <ActionButton type="button" onClick={this.cleanAndClose}>Cerrar</ActionButton>
                 </FlexColumnResponse>
             )

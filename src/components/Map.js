@@ -85,8 +85,7 @@ export class Map extends Component {
 
     _renderLayers() {
         const {badOpinions, intensity = 1, threshold = 0.03, radiusPixels = 30} = this.props
-        const data = badOpinions.map(opinion => [opinion.location.coordinates[1], opinion.location.coordinates[0], opinion.percent * 100])
-        console.log(data)
+        const data = (badOpinions && badOpinions.length) ? badOpinions.map(opinion => [opinion.location.coordinates[1], opinion.location.coordinates[0], opinion.percent * 100]) : []
         return [
           new HeatmapLayer({
             data,

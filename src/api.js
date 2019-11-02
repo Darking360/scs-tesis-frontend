@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.API_URL || 'http://localhost:3000';
+const API_URL = process.env.NODE_ENV === 'production' ? 'https://smart-san-cristobal.herokuapp.com' : 'http://localhost:3000';
 
 export function createOpinion(opinion, location, service) {
     return axios.post(`${API_URL}/opinions`, {
