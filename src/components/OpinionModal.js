@@ -209,9 +209,14 @@ export class OpinionModal extends Component {
         return (
             <FlexColumnResponse>
                 <h2>Muchas gracias por enviar tu opinion!</h2>
-                <h3>{headerMessages[response.sentiment]}</h3>
-                <img src={`/images/${response.sentiment}.svg`} alt="Icono del sentimiento"/>
-                <span>{defaultMessages[response.sentiment]}</span>
+                {
+                    response.sentiment ? (
+                        <>
+                            <h3>{headerMessages[response.sentiment]}</h3>
+                            <img src={`/images/${response.sentiment}.svg`} alt="Icono del sentimiento"/>
+                            <span>{defaultMessages[response.sentiment]}</span>
+                    </> ) : <h3>La opinion no puede ser procesada correctamente, intentalo de nuevo!</h3>
+                }
                 <ActionButton type="button" onClick={this.cleanAndClose}>Cerrar</ActionButton>
             </FlexColumnResponse>
         )
