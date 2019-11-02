@@ -115,7 +115,7 @@ export class Map extends Component {
             { this.renderCreateOpinionPopup('Estas aqui', myLatitude, myLongitude, 1) }
             { this.renderCreateOpinionPopup('Crear opinion en este punto', selectedLatitude, selectedLongitude, 2) }
         </ReactMapGL>
-        if (selectedOpinion || badOpinions) {
+        if (badOpinions) {
             return (
                 <DeckGL
                     initialViewState={INITIAL_VIEW_STATE}
